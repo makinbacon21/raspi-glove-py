@@ -1,4 +1,5 @@
 import yaml
+import requests
 import sys, os
 
 # pip install python-twitter, not pip install twitter
@@ -31,6 +32,16 @@ def tweetStatus(twitterCredsFile, tweet):
 
     status = api.PostUpdate(tweet)
 
+def postStatus():
+    url = "https://maker.ifttt.com/trigger/rpi-test/with/key/dl19EHfc-UHyIuQ-5AjJEQ"
+    obj = {"value1" : "Hello, World!"}
+
+    try:
+        requests.post(url, data=obj)
+    except:
+        logging.error("failed posting")
+        exit(1)
+
 
 if __name__ == "__main__":
 
@@ -41,8 +52,7 @@ if __name__ == "__main__":
     configFile = './scaleConfig.yaml'
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c","--config", action="store", dest="configFile",
-                        help="specify a configuration file")
+    parser.add_argument("-c","--config", action="store", dest="configFile", help="specify a configuration file")
     args = parser.parse_args()
 
     if args.configFile:
@@ -50,5 +60,7 @@ if __name__ == "__main__":
 
     cfg = scaleConfig.readConfig(configFile)
 
-    tweetStatus(cfg['twitterConfiguration']['twitterCredsFile'],
-                'y u no have beans? #testtweet #coffebeans')
+    #tweetStatus(cfg['twitterConfiguration']['twitterCredsFile'],
+    #            'y u no have beans? #testtweet #coffebeans')
+
+    postStatus()
